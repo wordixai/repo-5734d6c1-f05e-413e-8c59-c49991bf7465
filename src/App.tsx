@@ -8,6 +8,7 @@ import Bookings from "./pages/Bookings";
 import Galleries from "./pages/Galleries";
 import Packages from "./pages/Packages";
 import Referrals from "./pages/Referrals";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import AppSidebar from "./components/AppSidebar";
 import Header from "./components/Header";
@@ -30,6 +31,7 @@ const App = () => (
                 <Route path="/galleries" element={<Galleries />} />
                 <Route path="/packages" element={<Packages />} />
                 <Route path="/referrals" element={<Referrals />} />
+                <Route path="/settings" element={<Settings />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

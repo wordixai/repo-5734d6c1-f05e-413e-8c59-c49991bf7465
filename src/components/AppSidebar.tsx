@@ -66,11 +66,14 @@ export default function AppSidebar() {
       <SidebarFooter className="border-t border-sidebar-border p-4">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <a href="#" className="flex items-center gap-3">
+            <SidebarMenuButton 
+              asChild 
+              isActive={location.pathname === '/settings'}
+            >
+              <Link to="/settings" className="flex items-center gap-3">
                 <Settings className="h-4 w-4" />
                 <span>Settings</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

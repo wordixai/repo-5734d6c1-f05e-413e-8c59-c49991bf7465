@@ -79,12 +79,93 @@ export interface ReferralProgram {
   isActive: boolean;
 }
 
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+  businessName: string;
+  phone: string;
+  website?: string;
+  bio?: string;
+  location: string;
+}
+
+export interface BusinessSettings {
+  businessName: string;
+  address: string;
+  phone: string;
+  email: string;
+  website: string;
+  logo?: string;
+  currency: string;
+  timezone: string;
+  dateFormat: string;
+  language: string;
+  taxRate: number;
+  invoicePrefix: string;
+  workingHours: {
+    start: string;
+    end: string;
+    days: string[];
+  };
+}
+
+export interface NotificationSettings {
+  emailNotifications: {
+    newBooking: boolean;
+    bookingReminder: boolean;
+    paymentReceived: boolean;
+    galleryViewed: boolean;
+    clientRegistered: boolean;
+  };
+  smsNotifications: {
+    bookingReminder: boolean;
+    paymentDue: boolean;
+  };
+  pushNotifications: {
+    enabled: boolean;
+    booking: boolean;
+    payment: boolean;
+    gallery: boolean;
+  };
+  reminderSettings: {
+    defaultReminderTime: number; // hours before
+    autoReminders: boolean;
+    reminderFrequency: 'once' | 'daily' | 'weekly';
+  };
+}
+
+export interface SystemSettings {
+  theme: 'light' | 'dark' | 'system';
+  autoBackup: boolean;
+  backupFrequency: 'daily' | 'weekly' | 'monthly';
+  dataRetention: number; // months
+  twoFactorAuth: boolean;
+  sessionTimeout: number; // minutes
+  defaultGallerySettings: {
+    isPublic: boolean;
+    downloadEnabled: boolean;
+    passwordProtected: boolean;
+  };
+  watermarkSettings: {
+    enabled: boolean;
+    text: string;
+    position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center';
+    opacity: number;
+  };
+}
+
 interface AppState {
   clients: Client[];
   bookings: Booking[];
   galleries: Gallery[];
   packages: Package[];
   referralPrograms: ReferralProgram[];
+  userProfile: UserProfile;
+  businessSettings: BusinessSettings;
+  notificationSettings: NotificationSettings;
+  systemSettings: SystemSettings;
   
   // Actions
   addClient: (client: Omit<Client, 'id' | 'createdAt'>) => void;
@@ -102,6 +183,12 @@ interface AppState {
   addPackage: (pkg: Omit<Package, 'id'>) => void;
   updatePackage: (id: string, updates: Partial<Package>) => void;
   deletePackage: (id: string) => void;
+  
+  // Settings Actions
+  updateUserProfile: (updates: Partial<UserProfile>) => void;
+  updateBusinessSettings: (updates: Partial<BusinessSettings>) => void;
+  updateNotificationSettings: (updates: Partial<NotificationSettings>) => void;
+  updateSystemSettings: (updates: Partial<SystemSettings>) => void;
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -250,6 +337,82 @@ export const useStore = create<AppState>((set) => ({
       isActive: true
     }
   ],
+
+  userProfile: {
+    id: '1',
+    name: 'John Doe',
+    email: 'john@photography.com',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop',
+    businessName: 'John Doe Photography',
+    phone: '+1 (555) 123-4567',
+    website: 'www.johndoephotography.com',
+    bio: 'Professional photographer specializing in weddings and portraits',
+    location: 'Los Angeles, CA'
+  },
+
+  businessSettings: {
+    businessName: 'John Doe Photography',
+    address: '123 Photography St, Los Angeles, CA 90210',
+    phone: '+1 (555) 123-4567',
+    email: 'john@photography.com',
+    website: 'www.johndoephotography.com',
+    currency: 'USD',
+    timezone: 'America/Los_Angeles',
+    dateFormat: 'MM/DD/YYYY',
+    language: 'en',
+    taxRate: 8.25,
+    invoicePrefix: 'INV-',
+    workingHours: {
+      start: '09:00',
+      end: '18:00',
+      days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    }
+  },
+
+  notificationSettings: {
+    emailNotifications: {
+      newBooking: true,
+      bookingReminder: true,
+      paymentReceived: true,
+      galleryViewed: false,
+      clientRegistered: true
+    },
+    smsNotifications: {
+      bookingReminder: true,
+      paymentDue: true
+    },
+    pushNotifications: {
+      enabled: true,
+      booking: true,
+      payment: true,
+      gallery: false
+    },
+    reminderSettings: {
+      defaultReminderTime: 24,
+      autoReminders: true,
+      reminderFrequency: 'daily'
+    }
+  },
+
+  systemSettings: {
+    theme: 'light',
+    autoBackup: true,
+    backupFrequency: 'daily',
+    dataRetention: 12,
+    twoFactorAuth: false,
+    sessionTimeout: 60,
+    defaultGallerySettings: {
+      isPublic: false,
+      downloadEnabled: true,
+      passwordProtected: true
+    },
+    watermarkSettings: {
+      enabled: false,
+      text: 'John Doe Photography',
+      position: 'bottom-right',
+      opacity: 50
+    }
+  },
   
   // Actions
   addClient: (client) => set((state) => ({
@@ -298,5 +461,22 @@ export const useStore = create<AppState>((set) => ({
   
   deletePackage: (id) => set((state) => ({
     packages: state.packages.filter(pkg => pkg.id !== id)
+  })),
+
+  // Settings Actions
+  updateUserProfile: (updates) => set((state) => ({
+    userProfile: { ...state.userProfile, ...updates }
+  })),
+
+  updateBusinessSettings: (updates) => set((state) => ({
+    businessSettings: { ...state.businessSettings, ...updates }
+  })),
+
+  updateNotificationSettings: (updates) => set((state) => ({
+    notificationSettings: { ...state.notificationSettings, ...updates }
+  })),
+
+  updateSystemSettings: (updates) => set((state) => ({
+    systemSettings: { ...state.systemSettings, ...updates }
   }))
 }));
