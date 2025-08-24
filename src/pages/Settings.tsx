@@ -30,7 +30,7 @@ import {
   Image,
   Download,
   Lock,
-  Backup
+  HardDrive
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -615,7 +615,7 @@ export default function Settings() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Backup className="h-5 w-5" />
+                <HardDrive className="h-5 w-5" />
                 Backup & Data
               </CardTitle>
               <CardDescription>Manage your data backup and retention</CardDescription>
